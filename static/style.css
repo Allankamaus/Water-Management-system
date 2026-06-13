@@ -1,0 +1,9 @@
+body { padding-top: 1rem; }
+.navbar-brand { font-weight: 600; }
+h1 { margin-bottom: 0.5rem; }
+.list-group-item { font-size: 0.95rem; }
+
+/* Simple responsive tweaks */
+@media (max-width: 576px) {
+  .container { padding-left: 0.75rem; padding-right: 0.75rem; }
+}
