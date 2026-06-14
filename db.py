@@ -1,4 +1,5 @@
 import os
+import uuid
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -21,14 +22,16 @@ def verify_user(email: str, password: str):
     try:
         with get_conn() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                cur.execute("SELECT id, name, password FROM users WHERE email = %s", (email,))
+                cur.execute(
+                    "SELECT user_id, user_name, password FROM users WHERE email = %s OR username = %s",
+                    (email, email),
+                )
                 row = cur.fetchone()
                 if not row:
                     return None
                 stored = row["password"]
-                # Support hashed passwords and plain-text (legacy) for convenience
                 if check_password_hash(stored, password) or stored == password:
-                    return {"id": row["id"], "name": row["name"]}
+                    return {"id": row["user_id"], "name": row["user_name"]}
                 return None
     except Exception as e:
         print("DB verify_user error:", e)
@@ -41,14 +44,18 @@ def create_user(name: str, email: str, password: str):
     try:
         with get_conn() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT id FROM users WHERE email = %s", (email,))
+                cur.execute(
+                    "SELECT user_id FROM users WHERE email = %s OR username = %s",
+                    (email, email),
+                )
                 if cur.fetchone():
                     return False
+                username = email.split("@")[0]
+                user_id = f"USER-{uuid.uuid4().hex[:8].upper()}"
                 cur.execute(
-                    "INSERT INTO users (name, email, password) VALUES (%s, %s, %s) RETURNING id",
-                    (name, email, hashed),
+                    "INSERT INTO users (user_id, user_name, user_address, phone_number, fee_balance, email, username, password) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                    (user_id, name, "", "", 0.00, email, username, hashed),
                 )
-                new_id = cur.fetchone()[0]
                 conn.commit()
                 return True
     except Exception as e:
