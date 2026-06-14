@@ -16,8 +16,13 @@
         </button>
         <div class="collapse navbar-collapse" id="nav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('signin') }}">Sign In</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a></li>
+            {% if current_user %}
+              <li class="nav-item"><span class="nav-link">Hello, {{ current_user.name }}</span></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('signin') }}">Sign In</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a></li>
+            {% endif %}
           </ul>
         </div>
       </div>

@@ -1,0 +1,16 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "local",
+            "database": "water_management_database",
+            "username": "postgres",
+            "password": "12345",
+            "connectionTimeout": 30
+        }
+    ]
+}
