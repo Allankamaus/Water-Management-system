@@ -1,31 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-md-8">
-      <h1>Welcome to WaterService</h1>
-      <p>We provide scheduled water deliveries and easy online payments for your household.</p>
+  <div class="content home-content">
+    <h1>Welcome to WaterService</h1>
+    <p class="par">We provide scheduled water deliveries and easy online payments for your household.</p>
 
-      <h3>How it works</h3>
-      <ul>
-        <li>Check the delivery schedule for your area.</li>
-        <li>Sign up and create an account.</li>
-        <li>Pay securely online for deliveries.</li>
-      </ul>
+    <h3>How it works</h3>
+    <ul class="par">
+      <li>Check the delivery schedule for your area.</li>
+      <li>Sign up and create an account.</li>
+      <li>Pay securely online for deliveries.</li>
+    </ul>
 
-      <a class="btn btn-primary" href="{{ url_for('signup') }}">Get Started</a>
+    <div class="content-actions">
+      <a class="cn" href="{{ url_for('signup') }}">Get Started</a>
     </div>
 
-    <div class="col-md-4">
-      <h4>Upcoming Deliveries</h4>
-      <ul class="list-group">
-        {% for s in schedule %}
-          <li class="list-group-item">
-            <strong>{{ s.zone }}</strong><br>
-            {{ s.date }} — {{ s.time }}
-          </li>
-        {% endfor %}
-      </ul>
+    <div class="home-grid">
+      <div class="home-card">
+        <h3>Upcoming Deliveries</h3>
+        <ul>
+          {% for s in schedule %}
+            <li><strong>{{ s.zone }}</strong> — {{ s.date }} at {{ s.time }}</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 {% endblock %}

@@ -1,0 +1,14 @@
+
+
+
+INSERT INTO users (user_id, user_name, user_address, phone_number, fee_balance, email, username, password) 
+VALUES (
+    'ACC-LA2026',
+    'Jane Doe',
+    'Phase 2, Langata Estate',
+    '0722222222',
+    0.00,
+    'jane.doe@email.com',
+    'janedoe_nairobi',
+    '$2b$12$EixZaYVK1uK...' -- Example of what a secure hashed password string looks like
+);

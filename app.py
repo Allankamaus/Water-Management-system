@@ -23,7 +23,7 @@ def index():
     user = None
     if session.get("user_id"):
         user = {"id": session.get("user_id"), "name": session.get("user_name")}
-    return render_template("index.html", schedule=schedule, user=user)
+    return render_template("index.html", schedule=schedule, user=user, page_class="landing-page")
 
 
 @app.context_processor
@@ -82,6 +82,23 @@ def pay():
 
     # For GET requests, show the payment form.
     return render_template("pay.html")
+
+
+@app.route("/complaints", methods=["GET", "POST"])
+def complaints():
+    """Render the complaints page and handle complaint submissions."""
+    if request.method == "POST":
+        meter_id = request.form.get("meter_id")
+        email = request.form.get("email")
+        details = request.form.get("details")
+        photo = request.files.get("photo")
+
+        # Placeholder handling for complaint submissions.
+        # In a later iteration, this should be stored or emailed to admins.
+        flash("Your complaint has been submitted. Our admin team will review it shortly.")
+        return redirect(url_for("complaints"))
+
+    return render_template("complaints.html")
 
 
 @app.route("/logout")

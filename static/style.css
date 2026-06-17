@@ -1,9 +1,316 @@
-body { padding-top: 1rem; }
-.navbar-brand { font-weight: 600; }
-h1 { margin-bottom: 0.5rem; }
-.list-group-item { font-size: 0.95rem; }
+*{
+    margin: 0;
+    padding: 0;
+}
 
-/* Simple responsive tweaks */
-@media (max-width: 576px) {
-  .container { padding-left: 0.75rem; padding-right: 0.75rem; }
+body {
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(226, 228, 232);
+    background: #06142a;
+}
+
+.container{
+    width: min(1180px, 96%);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main{
+    width: 100%;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(35, 109, 202, 0.28), transparent 45%),
+        radial-gradient(circle at 84% 12%, rgba(8, 66, 143, 0.25), transparent 40%),
+        linear-gradient(160deg, rgb(6, 20, 42), rgb(8, 28, 54) 48%, rgb(7, 35, 65));
+    min-height: 100vh;
+    padding-bottom: 90px;
+    position: relative;
+}
+
+.main.landing-page{
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/static/images/water-drops.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.navbar{
+    width: 100%;
+    height: 70px;
+    margin: 0;
+    padding: 0 30px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(3px);
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navbar::after{
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.icon{
+    width: auto;
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.logo{
+    color: rgb(16, 80, 164);
+    font-size: 35px;
+    font-family: 'Times New Roman', Times, serif;
+    text-decoration: none;
+    padding-left: 0;
+    float: none;
+    padding-top: 0;
+}
+
+.menu{
+    width: auto;
+    height: 70px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+ul {
+    float: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu ul{
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.menu ul li{
+    margin: 0 20px;
+}
+
+.menu ul li a{
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.menu ul li a:hover{
+    color: rgb(16, 80, 164);
+    transition: 0.3s;
+}
+
+.content{
+    width: 1200px;
+    height: auto;
+    margin: 80px auto 0;
+    clear: both;
+    color: rgb(226, 228, 232);
+    position: relative;
+    text-align: center;
+}
+
+.content .par{
+    padding-left: 0;
+    padding-bottom: 20px;
+    line-height: 30px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+    line-height: 1.5;
+    margin: 20px 0;
+}
+
+.content h1{
+    font-size: 50px;
+    padding-left: 0;
+    padding-top: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.content .cn{
+    width: 150px;
+    height: 40px;
+    background: rgb(16, 80, 164);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.content-actions{
+    margin-top: 10px;
+}
+
+.cn-alt{
+    background: transparent;
+    border: 1px solid rgb(16, 80, 164);
+}
+
+.cn:hover{
+    background: rgb(10, 50, 100);
+    transition: 0.3s;
+}
+
+.footer{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 18px 20px;
+    text-align: center;
+    color: rgb(226, 228, 232);
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(3px);
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+}
+
+.form-wrap{
+    width: min(460px, 92%);
+    margin: 70px auto 0;
+    padding: 28px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    color: rgb(226, 228, 232);
+    box-sizing: border-box;
+}
+
+.form-wrap h1{
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.form-group{
+    margin-bottom: 14px;
+}
+
+.form-group label{
+    display: block;
+    margin-bottom: 6px;
+    font-size: 15px;
+    color: rgb(226, 228, 232);
+}
+
+.form-input{
+    width: 100%;
+    height: 38px;
+    border: 1px solid rgb(16, 80, 164);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    padding: 8px 10px;
+    box-sizing: border-box;
+}
+
+input.form-input[type="file"]{
+    padding: 6px 8px;
+}
+
+textarea.form-input{
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-action{
+    width: 100%;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background: rgb(16, 80, 164);
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.form-action:hover{
+    background: rgb(10, 50, 100);
+    transition: 0.3s;
+}
+
+.form-note{
+    margin-top: 12px;
+    text-align: center;
+}
+
+.form-note a{
+    color: rgb(126, 183, 255);
+    text-decoration: none;
+}
+
+.form-note a:hover{
+    text-decoration: underline;
+}
+
+.home-content{
+    text-align: left;
+}
+
+.home-content h1,
+.home-content .par{
+    text-align: center;
+}
+
+.home-grid{
+    width: min(1100px, 96%);
+    margin: 24px auto 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+}
+
+.home-card{
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(126, 183, 255, 0.28);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.home-card h3{
+    margin-bottom: 8px;
+    color: rgb(126, 183, 255);
+}
+
+.home-card p{
+    color: rgb(226, 228, 232);
+}
+
+.home-actions{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.updates-panel{
+    width: min(1100px, 96%);
+    margin: 24px auto 0;
+    padding: 18px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(126, 183, 255, 0.28);
+}
+
+.updates-panel h2{
+    margin-bottom: 12px;
+    color: rgb(126, 183, 255);
+}
+
+.updates-list{
+    margin-left: 20px;
+    color: rgb(226, 228, 232);
+    line-height: 1.6;
 }

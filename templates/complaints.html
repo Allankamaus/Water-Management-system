@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="form-wrap">
+    <h1>Complaints</h1>
+    <form method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="complaintMeterId">Meter ID</label>
+        <input class="form-input" id="complaintMeterId" name="meter_id" type="text" required>
+      </div>
+
+      <div class="form-group">
+        <label for="complaintEmail">Email</label>
+        <input class="form-input" id="complaintEmail" name="email" type="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="complaintText">Complaint Details</label>
+        <textarea class="form-input" id="complaintText" name="details" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="complaintPhoto">Add Photo (optional)</label>
+        <input class="form-input" id="complaintPhoto" name="photo" type="file" accept="image/*">
+      </div>
+
+      <button class="form-action" type="submit">Submit Complaint</button>
+    </form>
+  </div>
+{% endblock %}
