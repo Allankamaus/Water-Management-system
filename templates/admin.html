@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    <p>Below is the list of all current users registered in the system.</p>
+
+    {% if users %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Phone</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+            <tr>
+              <td>{{ user.user_id }}</td>
+              <td>{{ user.user_name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.phone_number or "-" }}</td>
+              <td>{{ "%.2f" | format(user.fee_balance) }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="alert alert-warning">No users found.</div>
+    {% endif %}
+  </div>
+{% endblock %}

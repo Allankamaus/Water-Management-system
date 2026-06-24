@@ -61,3 +61,38 @@ def create_user(name: str, email: str, password: str):
     except Exception as e:
         print("DB create_user error:", e)
         return False
+
+
+def verify_admin(email: str, password: str):
+    """Verify admin credentials. Returns admin data dict when valid."""
+    try:
+        with get_conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT admin_id, admin_name, password FROM admins WHERE email = %s OR username = %s",
+                    (email, email),
+                )
+                row = cur.fetchone()
+                if not row:
+                    return None
+                stored = row["password"]
+                if check_password_hash(stored, password) or stored == password:
+                    return {"id": row["admin_id"], "name": row["admin_name"]}
+                return None
+    except Exception as e:
+        print("DB verify_admin error:", e)
+        return None
+
+
+def get_all_users():
+    """Return a list of all registered users."""
+    try:
+        with get_conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT user_id, user_name, email, username, phone_number, fee_balance FROM users ORDER BY user_name"
+                )
+                return cur.fetchall()
+    except Exception as e:
+        print("DB get_all_users error:", e)
+        return []

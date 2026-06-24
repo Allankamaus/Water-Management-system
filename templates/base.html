@@ -19,6 +19,9 @@
             <li><a href="{{ url_for('index') }}">Home</a></li>
             <li><a href="{{ url_for('complaints') }}">Complaints</a></li>
             {% if current_user %}
+              {% if current_user.role == 'admin' %}
+                <li><a href="{{ url_for('admin_dashboard') }}">Admin</a></li>
+              {% endif %}
               <li><a href="{{ url_for('logout') }}">Logout</a></li>
             {% else %}
               <li><a href="{{ url_for('signin') }}">Sign In</a></li>

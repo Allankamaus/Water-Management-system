@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import os
-from db import verify_user, create_user
+from db import verify_user, create_user, verify_admin, get_all_users
 
 # Create the Flask application object. This is the central object used to
 # register routes, configure settings, and run the web server.
@@ -29,7 +29,13 @@ def index():
 @app.context_processor
 def inject_user():
     if session.get("user_id"):
-        return {"current_user": {"id": session.get("user_id"), "name": session.get("user_name")}}
+        return {
+            "current_user": {
+                "id": session.get("user_id"),
+                "name": session.get("user_name"),
+                "role": session.get("user_role", "user"),
+            }
+        }
     return {"current_user": None}
 
 
@@ -39,12 +45,20 @@ def signin():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
-        user = verify_user(email, password)
+        role = request.form.get("role", "user")
+
+        if role == "admin":
+            user = verify_admin(email, password)
+        else:
+            user = verify_user(email, password)
+
         if user:
             session["user_id"] = user["id"]
             session["user_name"] = user.get("name")
+            session["user_role"] = "admin" if role == "admin" else "user"
             flash("Signed in successfully")
-            return redirect(url_for("index"))
+            return redirect(url_for("admin_dashboard") if role == "admin" else url_for("index"))
+
         flash("Invalid email or password")
         return redirect(url_for("signin"))
 
@@ -106,6 +120,17 @@ def logout():
     session.clear()
     flash("Signed out")
     return redirect(url_for("index"))
+
+
+@app.route("/admin")
+def admin_dashboard():
+    """Render the admin dashboard showing all registered users."""
+    if session.get("user_role") != "admin":
+        flash("Admin access required")
+        return redirect(url_for("signin"))
+
+    users = get_all_users()
+    return render_template("admin.html", users=users)
 
 
 if __name__ == "__main__":

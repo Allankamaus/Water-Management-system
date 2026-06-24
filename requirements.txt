@@ -1,2 +1,10 @@
 Flask>=2.0
 psycopg2-binary>=2.9
+python version:3.14
+get youre postgres version
+talk about youre development environment
+create a report - shows a summary of what youre system has development
+persenttion i 7mins long
+deliverables outside of code: Slides outlining theory, a video outlining what you are going to present
+
+state minimum network and sotware requirements. packages etc
