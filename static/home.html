@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sign Up - Water System</title>
+    <title>Home - Water System</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body class="auth-page">
@@ -29,38 +29,37 @@
             </div>
         </div>
 
-        <div class="form-wrap">
-            <h1>Sign Up</h1>
-            <form>
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input class="form-input" id="name" type="text" required>
+        <div class="content home-content">
+            <h1 id="welcomeHeading">Welcome, Customer</h1>
+            <p class="par">Your authenticated customer dashboard with account and billing details.</p>
+
+            <div class="home-grid">
+                <div class="home-card">
+                    <h3>MeterID</h3>
+                    <p id="meterIdValue">-</p>
                 </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input class="form-input" id="email" type="email" required>
+                <div class="home-card">
+                    <h3>Account Status</h3>
+                    <p id="accountStatusValue">-</p>
                 </div>
-
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input class="form-input" id="username" type="text" required>
+                <div class="home-card">
+                    <h3>Zone</h3>
+                    <p id="zoneValue">-</p>
                 </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input class="form-input" id="password" type="password" required>
+                <div class="home-card">
+                    <h3>Consumption</h3>
+                    <p id="consumptionValue">-</p>
                 </div>
-
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input class="form-input" id="confirmPassword" type="password" required>
+                <div class="home-card">
+                    <h3>Bill</h3>
+                    <p id="billValue">-</p>
                 </div>
+            </div>
 
-                <button class="form-action" type="submit">Create Account</button>
-            </form>
-
-            <p class="form-note">Already have an account? <a href="/static/login.html">Log In</a></p>
+            <div class="home-actions">
+                <a class="cn" href="/static/complaints.html">Report a Complaint</a>
+                <a class="cn cn-alt" href="/static/services.html">Services</a>
+            </div>
         </div>
 
         <footer class="footer"></footer>
