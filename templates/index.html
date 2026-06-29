@@ -19,11 +19,16 @@
     <div class="home-grid">
       <div class="home-card">
         <h3>Upcoming Deliveries</h3>
-        <ul>
-          {% for s in schedule %}
-            <li><strong>{{ s.zone }}</strong> — {{ s.date }} at {{ s.time }}</li>
-          {% endfor %}
-        </ul>
+        <p class="par">{{ schedule_label }}</p>
+        {% if schedule %}
+          <ul>
+            {% for s in schedule %}
+              <li><strong>{{ s.location }}</strong> — {{ s.delivery_time }}</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No schedules are available yet.</p>
+        {% endif %}
       </div>
     </div>
   </div>

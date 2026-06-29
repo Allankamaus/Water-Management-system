@@ -1,6 +1,15 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import os
-from db import verify_user, create_user, verify_admin, get_all_users
+from db import (
+    verify_user,
+    create_user,
+    verify_admin,
+    get_all_users,
+    get_all_schedules,
+    create_schedule,
+    get_schedules_for_location,
+    get_user_profile,
+)
 
 # Create the Flask application object. This is the central object used to
 # register routes, configure settings, and run the web server.
@@ -13,17 +22,28 @@ app.secret_key = os.environ.get("FLASK_SECRET", "dev-secret")
 
 @app.route("/")
 def index():
-    """Render the landing page with basic service information and delivery schedule."""
-    # Example schedule data shown on the homepage. In later iterations,
-    # this should come from a database or schedule service.
-    schedule = [
-        {"zone": "North", "date": "2026-06-20", "time": "08:00 - 10:00"},
-        {"zone": "East", "date": "2026-06-21", "time": "14:00 - 16:00"},
-    ]
+    """Render the landing page with delivery schedules based on the logged-in user's area."""
     user = None
+    schedule = get_all_schedules()
+    schedule_label = "All areas"
+
     if session.get("user_id"):
         user = {"id": session.get("user_id"), "name": session.get("user_name")}
-    return render_template("index.html", schedule=schedule, user=user, page_class="landing-page")
+        profile = get_user_profile(session.get("user_id"))
+        if profile and profile.get("user_address"):
+            schedule = get_schedules_for_location(profile["user_address"])
+            schedule_label = f"Your area ({profile['user_address']})"
+        else:
+            schedule = get_all_schedules()
+            schedule_label = "All areas"
+
+    return render_template(
+        "index.html",
+        schedule=schedule,
+        schedule_label=schedule_label,
+        user=user,
+        page_class="landing-page",
+    )
 
 
 @app.context_processor
@@ -73,7 +93,8 @@ def signup():
         name = request.form.get("name")
         email = request.form.get("email")
         password = request.form.get("password")
-        created = create_user(name, email, password)
+        address = request.form.get("address", "").strip()
+        created = create_user(name, email, password, address)
         if created:
             flash("Account created. Please sign in.")
             return redirect(url_for("signin"))
@@ -120,6 +141,32 @@ def logout():
     session.clear()
     flash("Signed out")
     return redirect(url_for("index"))
+
+
+@app.route("/admin/schedule", methods=["GET", "POST"])
+def admin_schedule():
+    """Allow admins to create delivery schedules for upcoming weeks."""
+    if session.get("user_role") != "admin":
+        flash("Admin access required")
+        return redirect(url_for("signin"))
+
+    if request.method == "POST":
+        location = request.form.get("location", "").strip()
+        delivery_time = request.form.get("delivery_time", "").strip()
+
+        if location and delivery_time:
+            created = create_schedule(location, delivery_time)
+            if created:
+                flash("Water delivery schedule created successfully")
+            else:
+                flash("Could not save the new schedule")
+        else:
+            flash("Please enter both the area and time")
+
+        return redirect(url_for("admin_schedule"))
+
+    schedules = get_all_schedules()
+    return render_template("admin_schedule.html", schedules=schedules)
 
 
 @app.route("/admin")

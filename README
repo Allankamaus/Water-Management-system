@@ -1,14 +1,47 @@
+-- 1. Create the database (Run this first)
+CREATE DATABASE water_management_database;
 
+-- Connect to the database before running the next block:
+-- In psql client, type: \c water_management_database
 
-
-INSERT INTO users (user_id, user_name, user_address, phone_number, fee_balance, email, username, password) 
-VALUES (
-    'ACC-LA2026',
-    'Jane Doe',
-    'Phase 2, Langata Estate',
-    '0722222222',
-    0.00,
-    'jane.doe@email.com',
-    'janedoe_nairobi',
-    '$2b$12$EixZaYVK1uK...' -- Example of what a secure hashed password string looks like
+-- 2. Create the users table
+CREATE TABLE users (
+    user_id VARCHAR(50) NOT NULL,
+    user_name VARCHAR(100) NOT NULL,
+    user_address TEXT,
+    phone_number VARCHAR(15) NOT NULL,
+    fee_balance NUMERIC(10, 2) DEFAULT 0.00 NOT NULL,
+    
+    -- Primary key constraint
+    CONSTRAINT pk_users PRIMARY KEY (user_id)
 );
+
+-- 3. Add an index on phone_number for lightning-fast M-Pesa API callbacks
+CREATE INDEX idx_users_phone ON users(phone_number);
+
+
+CREATE TABLE admins (
+    admin_id VARCHAR(50) NOT NULL,
+    admin_name VARCHAR(100) NOT NULL,
+    admin_address TEXT,
+    phone_number VARCHAR(15) NOT NULL,
+    email VARCHAR(255) CONSTRAINT uq_admins_email UNIQUE,
+    username VARCHAR(50) CONSTRAINT uq_admins_username UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    
+    -- Primary key constraint for admins
+    CONSTRAINT pk_admins PRIMARY KEY (admin_id)
+);
+
+-- Indexing phone number for fast lookups if admins receive system alerts via SMS
+CREATE INDEX idx_admins_phone ON admins(phone_number);
+
+
+CREATE TABLE IF NOT EXISTS water_schedules (
+    schedule_id VARCHAR(50) PRIMARY KEY,
+    location VARCHAR(255) NOT NULL,
+    delivery_time VARCHAR(255) NOT NULL
+);
+
+Need to add network requirements
+

@@ -17,6 +17,52 @@ def get_conn():
     return psycopg2.connect(**config)
 
 
+def ensure_schema():
+    """Create the required tables and default admin account if missing."""
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS admins (
+                        admin_id VARCHAR(50) PRIMARY KEY,
+                        admin_name VARCHAR(100) NOT NULL,
+                        admin_address TEXT,
+                        phone_number VARCHAR(15) NOT NULL,
+                        email VARCHAR(255) UNIQUE,
+                        username VARCHAR(50) UNIQUE,
+                        password VARCHAR(255) NOT NULL
+                    )
+                    """
+                )
+                cur.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS water_schedules (
+                        schedule_id VARCHAR(50) PRIMARY KEY,
+                        location VARCHAR(255) NOT NULL,
+                        delivery_time VARCHAR(255) NOT NULL
+                    )
+                    """
+                )
+                cur.execute(
+                    "SELECT admin_id FROM admins WHERE username = %s",
+                    ("admin",),
+                )
+                if not cur.fetchone():
+                    admin_id = f"ADMIN-{uuid.uuid4().hex[:8].upper()}"
+                    password_hash = generate_password_hash("admin")
+                    cur.execute(
+                        "INSERT INTO admins (admin_id, admin_name, admin_address, phone_number, email, username, password) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                        (admin_id, "admin", "", "0712345678", "admin@email.com", "admin", password_hash),
+                    )
+                conn.commit()
+    except Exception as e:
+        print("DB ensure_schema error:", e)
+
+
+ensure_schema()
+
+
 def verify_user(email: str, password: str):
     """Verify credentials. Returns dict with `id` and `name` when OK, else None."""
     try:
@@ -38,7 +84,7 @@ def verify_user(email: str, password: str):
         return None
 
 
-def create_user(name: str, email: str, password: str):
+def create_user(name: str, email: str, password: str, address: str = ""):
     """Create a new user. Returns True on success, False if user exists or on error."""
     hashed = generate_password_hash(password)
     try:
@@ -54,7 +100,7 @@ def create_user(name: str, email: str, password: str):
                 user_id = f"USER-{uuid.uuid4().hex[:8].upper()}"
                 cur.execute(
                     "INSERT INTO users (user_id, user_name, user_address, phone_number, fee_balance, email, username, password) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-                    (user_id, name, "", "", 0.00, email, username, hashed),
+                    (user_id, name, address, "", 0.00, email, username, hashed),
                 )
                 conn.commit()
                 return True
@@ -96,3 +142,69 @@ def get_all_users():
     except Exception as e:
         print("DB get_all_users error:", e)
         return []
+
+
+def create_schedule(location: str, delivery_time: str):
+    """Create a new water delivery schedule entry."""
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                schedule_id = f"SCH-{uuid.uuid4().hex[:8].upper()}"
+                cur.execute(
+                    "INSERT INTO water_schedules (schedule_id, location, delivery_time) VALUES (%s, %s, %s)",
+                    (schedule_id, location, delivery_time),
+                )
+                conn.commit()
+                return True
+    except Exception as e:
+        print("DB create_schedule error:", e)
+        return False
+
+
+def get_all_schedules():
+    """Return all available schedules ordered by newest entries first."""
+    try:
+        with get_conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT schedule_id, location, delivery_time FROM water_schedules ORDER BY schedule_id DESC"
+                )
+                return cur.fetchall()
+    except Exception as e:
+        print("DB get_all_schedules error:", e)
+        return []
+
+
+def get_schedules_for_location(location: str):
+    """Return schedules for a specific area, with fallback to all schedules if none match."""
+    if not location:
+        return get_all_schedules()
+    try:
+        with get_conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT schedule_id, location, delivery_time FROM water_schedules WHERE LOWER(location) = LOWER(%s) ORDER BY schedule_id DESC",
+                    (location,),
+                )
+                rows = cur.fetchall()
+                if rows:
+                    return rows
+                return get_all_schedules()
+    except Exception as e:
+        print("DB get_schedules_for_location error:", e)
+        return get_all_schedules()
+
+
+def get_user_profile(user_id: str):
+    """Fetch the logged-in user's profile details."""
+    try:
+        with get_conn() as conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                cur.execute(
+                    "SELECT user_id, user_name, user_address, email FROM users WHERE user_id = %s",
+                    (user_id,),
+                )
+                return cur.fetchone()
+    except Exception as e:
+        print("DB get_user_profile error:", e)
+        return None

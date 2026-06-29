@@ -14,3 +14,9 @@ CREATE TABLE admins (
 
 -- Indexing phone number for fast lookups if admins receive system alerts via SMS
 CREATE INDEX idx_admins_phone ON admins(phone_number);
+
+CREATE TABLE IF NOT EXISTS water_schedules (
+    schedule_id VARCHAR(50) PRIMARY KEY,
+    location VARCHAR(255) NOT NULL,
+    delivery_time VARCHAR(255) NOT NULL
+);

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="form-wrap">
+    <h1>Create Water Schedule</h1>
+    <form method="post">
+      <div class="form-group">
+        <label>Area / Location</label>
+        <input type="text" name="location" class="form-input" placeholder="e.g. North Zone" required>
+      </div>
+      <div class="form-group">
+        <label>Delivery Time</label>
+        <input type="text" name="delivery_time" class="form-input" placeholder="e.g. Monday 08:00 - 10:00" required>
+      </div>
+      <button class="form-action" type="submit">Save Schedule</button>
+    </form>
+  </div>
+
+  <div class="updates-panel">
+    <h2>Existing Schedules</h2>
+    {% if schedules %}
+      <ul class="updates-list">
+        {% for schedule in schedules %}
+          <li><strong>{{ schedule.location }}</strong> — {{ schedule.delivery_time }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No schedules have been created yet.</p>
+    {% endif %}
+  </div>
+{% endblock %}

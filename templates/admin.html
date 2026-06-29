@@ -4,6 +4,9 @@
   <div class="admin-dashboard">
     <h1>Admin Dashboard</h1>
     <p>Below is the list of all current users registered in the system.</p>
+    <div class="home-actions">
+      <a class="cn" href="{{ url_for('admin_schedule') }}">Create Delivery Schedule</a>
+    </div>
 
     {% if users %}
       <table class="table table-striped">
