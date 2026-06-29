@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Complaints - Water System</title>
+    <title>Home - Water System</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
+<body class="auth-page">
     <div class="main">
         <div class="navbar">
             <div class="icon">
@@ -29,31 +29,37 @@
             </div>
         </div>
 
-        <div class="form-wrap">
-            <h1>Complaints</h1>
-            <form enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="complaintMeterId">Meter ID</label>
-                    <input class="form-input" id="complaintMeterId" type="text" required>
-                </div>
+        <div class="content home-content">
+            <h1 id="welcomeHeading">Welcome, Customer</h1>
+            <p class="par">Your authenticated customer dashboard with account and billing details.</p>
 
-                <div class="form-group">
-                    <label for="complaintEmail">Email</label>
-                    <input class="form-input" id="complaintEmail" type="email" required>
+            <div class="home-grid">
+                <div class="home-card">
+                    <h3>MeterID</h3>
+                    <p id="meterIdValue">-</p>
                 </div>
-
-                <div class="form-group">
-                    <label for="complaintText">Complaint Details</label>
-                    <textarea class="form-input" id="complaintText" required></textarea>
+                <div class="home-card">
+                    <h3>Account Status</h3>
+                    <p id="accountStatusValue">-</p>
                 </div>
-
-                <div class="form-group">
-                    <label for="complaintPhoto">Add Photo (optional)</label>
-                    <input class="form-input" id="complaintPhoto" type="file" accept="image/*">
+                <div class="home-card">
+                    <h3>Zone</h3>
+                    <p id="zoneValue">-</p>
                 </div>
+                <div class="home-card">
+                    <h3>Consumption</h3>
+                    <p id="consumptionValue">-</p>
+                </div>
+                <div class="home-card">
+                    <h3>Bill</h3>
+                    <p id="billValue">-</p>
+                </div>
+            </div>
 
-                <button class="form-action" type="submit">Submit Complaint</button>
-            </form>
+            <div class="home-actions">
+                <a class="cn" href="/static/complaints.html">Report a Complaint</a>
+                <a class="cn cn-alt" href="/static/services.html">Services</a>
+            </div>
         </div>
 
         <footer class="footer"></footer>

@@ -83,7 +83,7 @@ def signin():
         return redirect(url_for("signin"))
 
     # For GET requests, just show the sign-in form.
-    return render_template("signin.html")
+    return render_template("login.html")
 
 
 @app.route("/signup", methods=["GET", "POST"])

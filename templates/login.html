@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Complaints - Water System</title>
+    <title>Log In - Water System</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
+<body class="auth-page">
     <div class="main">
         <div class="navbar">
             <div class="icon">
@@ -30,30 +30,22 @@
         </div>
 
         <div class="form-wrap">
-            <h1>Complaints</h1>
-            <form enctype="multipart/form-data">
+            <h1>Log In</h1>
+            <form>
                 <div class="form-group">
-                    <label for="complaintMeterId">Meter ID</label>
-                    <input class="form-input" id="complaintMeterId" type="text" required>
+                    <label for="loginUser">Username or Email</label>
+                    <input class="form-input" id="loginUser" type="text" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="complaintEmail">Email</label>
-                    <input class="form-input" id="complaintEmail" type="email" required>
+                    <label for="loginPassword">Password</label>
+                    <input class="form-input" id="loginPassword" type="password" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="complaintText">Complaint Details</label>
-                    <textarea class="form-input" id="complaintText" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="complaintPhoto">Add Photo (optional)</label>
-                    <input class="form-input" id="complaintPhoto" type="file" accept="image/*">
-                </div>
-
-                <button class="form-action" type="submit">Submit Complaint</button>
+                <button class="form-action" type="submit">Log In</button>
             </form>
+
+            <p class="form-note">Need an account? <a href="/static/signup.html">Sign Up</a></p>
         </div>
 
         <footer class="footer"></footer>

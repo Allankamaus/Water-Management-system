@@ -3,17 +3,11 @@
     padding: 0;
 }
 
-body {
-    margin: 0;
-    font-family: 'Times New Roman', Times, serif;
-    color: rgb(226, 228, 232);
-    background: #06142a;
-}
-
-.container{
-    width: min(1180px, 96%);
-    margin: 0 auto;
-    padding: 0 20px;
+html, body{
+    min-height: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background: rgb(6, 20, 42);
 }
 
 .main{
@@ -22,15 +16,27 @@ body {
         radial-gradient(circle at 12% 18%, rgba(35, 109, 202, 0.28), transparent 45%),
         radial-gradient(circle at 84% 12%, rgba(8, 66, 143, 0.25), transparent 40%),
         linear-gradient(160deg, rgb(6, 20, 42), rgb(8, 28, 54) 48%, rgb(7, 35, 65));
+    min-height: 100%;
     min-height: 100vh;
+    min-height: 100dvh;
     padding-bottom: 90px;
     position: relative;
 }
 
-.main.landing-page{
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/static/images/water-drops.jpg');
+.landing-page .main{
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('water-drops.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.auth-page .main{
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)), url('water-drops.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .navbar{
@@ -82,9 +88,11 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 
 .menu ul{
+    
     list-style: none;
     display: flex;
     justify-content: space-between;
@@ -93,6 +101,7 @@ ul {
 }
 
 .menu ul li{
+    
     margin: 0 20px;
 }
 
@@ -108,8 +117,67 @@ ul {
     transition: 0.3s;
 }
 
+.search{
+    width: auto;
+    height: 70px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    
+}
+
+.srch{
+    font-family: 'Times New Roman', Times, serif;
+    width: 100px;
+    height: 30px;
+    background: transparent;
+    font-size: 16px;
+    padding: 5px;
+    border: none;
+    margin-top: 0;
+    border-right:none;
+    border:1px solid rgb(16, 80, 164);
+    border-radius: 5px 0 0 5px;
+    float: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.srch:hover{
+    background: rgb(10, 50, 100);
+    
+}
+
+.btn {
+    width: 100px;
+    height: 30px;
+    background: rgb(16, 80, 164);
+    border: 2px solid rgb(16, 80, 164);
+    color: white;
+    font-size: 14px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 600;
+    margin-top: 0;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+    transition: 0.3s;
+}
+
+.btn:hover{
+    background: rgb(10, 50, 100);
+    color: white;
+}
+
+.btn:focus{
+    outline: none;
+}
+
+.srch:focus{
+    outline: none;
+}
+
 .content{
-    width: 1200px;
+    width: min(1200px, 92%);
     height: auto;
     margin: 80px auto 0;
     clear: both;
@@ -135,34 +203,47 @@ ul {
     font-family: 'Times New Roman', Times, serif;
 }
 
-.content .cn{
+.cn{
     width: 150px;
     height: 40px;
     background: rgb(16, 80, 164);
+    border: 2px solid rgb(16, 80, 164);
     color: white;
     padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
+    border-radius: 6px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+    font-weight: 600;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
     box-sizing: border-box;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .content-actions{
     margin-top: 10px;
 }
 
+.content-actions .cn{
+    margin: 0 6px;
+}
+
+.cn a{
+    text-decoration: none;
+    color: white;
+}
+
 .cn-alt{
     background: transparent;
-    border: 1px solid rgb(16, 80, 164);
+    border: 2px solid rgb(16, 80, 164);
 }
 
 .cn:hover{
     background: rgb(10, 50, 100);
-    transition: 0.3s;
 }
 
 .footer{
@@ -230,17 +311,19 @@ textarea.form-input{
 .form-action{
     width: 100%;
     height: 40px;
-    border: none;
+    border: 2px solid rgb(16, 80, 164);
     border-radius: 6px;
     background: rgb(16, 80, 164);
     color: white;
     cursor: pointer;
     font-size: 15px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
 .form-action:hover{
     background: rgb(10, 50, 100);
-    transition: 0.3s;
 }
 
 .form-note{
@@ -259,6 +342,11 @@ textarea.form-input{
 
 .home-content{
     text-align: left;
+    width: 100%;
+    max-width: 1400px;
+    margin: 28px auto 0;
+    padding: 0 24px;
+    box-sizing: border-box;
 }
 
 .home-content h1,
@@ -267,8 +355,8 @@ textarea.form-input{
 }
 
 .home-grid{
-    width: min(1100px, 96%);
-    margin: 24px auto 0;
+    width: 100%;
+    margin: 24px 0 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 14px;
@@ -296,8 +384,8 @@ textarea.form-input{
 }
 
 .updates-panel{
-    width: min(1100px, 96%);
-    margin: 24px auto 0;
+    width: 100%;
+    margin: 24px 0 0;
     padding: 18px;
     border-radius: 10px;
     background: rgba(0, 0, 0, 0.35);
@@ -310,7 +398,72 @@ textarea.form-input{
 }
 
 .updates-list{
-    margin-left: 20px;
+    margin-left: 0;
     color: rgb(226, 228, 232);
     line-height: 1.6;
+}
+
+.services-page-content{
+    width: 100%;
+    max-width: 1400px;
+    margin: 28px auto 0;
+    padding: 0 24px;
+    box-sizing: border-box;
+}
+
+.service-card{
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 18px;
+}
+
+.service-card h1{
+    margin-bottom: 12px;
+}
+
+.service-text{
+    text-align: left;
+    line-height: 1.6;
+    margin-bottom: 14px;
+}
+
+.service-actions{
+    margin-top: 8px;
+    text-align: left;
+}
+
+.service-actions .cn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-sizing: border-box;
+    margin-right: 10px;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.service-actions-multi .cn{
+    min-width: 210px;
+}
+
+#noticeList{
+    margin-top: 10px;
+}
+
+.details-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.detail-item{
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(126, 183, 255, 0.24);
+    border-radius: 8px;
+    padding: 12px 14px;
+    line-height: 1.55;
 }

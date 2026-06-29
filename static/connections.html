@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Connections - Water System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="auth-page">
+    <div class="main">
+        <div class="navbar">
+            <div class="icon">
+                <a class="logo" href="/static/index.html">Water</a>
+            </div>
+
+            <div class="menu">
+                <ul>
+                    <li><a href="/static/home.html">Home</a></li>
+                    <li><a href="/static/about.html">About</a></li>
+                    <li><a href="/static/services.html">Services</a></li>
+                    <li><a href="/static/connections.html">Connections</a></li>
+                    <li><a href="/static/notices.html">Notices</a></li>
+                    <li><a href="/static/complaints.html">Complaints</a></li>
+                    <li><a href="/static/contact.html">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="search">
+                <input class="srch" type="search" placeholder="Search...">
+                <a href="#"><button class="btn">Search</button></a>
+            </div>
+        </div>
+
+        <div class="services-page-content">
+            <div class="form-wrap service-card" id="new-connection">
+                <h1>New Connection Request</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="newConnectionName">Full Name</label>
+                        <input class="form-input" id="newConnectionName" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newConnectionLocation">Property Location</label>
+                        <input class="form-input" id="newConnectionLocation" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newConnectionDetails">Request Details</label>
+                        <textarea class="form-input" id="newConnectionDetails" required></textarea>
+                    </div>
+                    <button class="form-action" type="submit">Submit New Connection</button>
+                </form>
+            </div>
+
+            <div class="form-wrap service-card" id="reconnection">
+                <h1>Reconnection Request</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="reconnectionMeterId">Meter ID</label>
+                        <input class="form-input" id="reconnectionMeterId" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reconnectionReason">Reason for Reconnection</label>
+                        <textarea class="form-input" id="reconnectionReason" required></textarea>
+                    </div>
+                    <button class="form-action" type="submit">Submit Reconnection Request</button>
+                </form>
+            </div>
+
+            <div class="form-wrap service-card" id="meter-replacement">
+                <h1>Meter Replacement Request</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="replacementMeterId">Current Meter ID</label>
+                        <input class="form-input" id="replacementMeterId" type="text" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="replacementIssue">Issue Description</label>
+                        <textarea class="form-input" id="replacementIssue" required></textarea>
+                    </div>
+                    <button class="form-action" type="submit">Submit Replacement Request</button>
+                </form>
+            </div>
+        </div>
+
+        <footer class="footer"></footer>
+    </div>
+</body>
+</html>
+
