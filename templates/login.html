@@ -31,21 +31,40 @@
 
         <div class="form-wrap">
             <h1>Log In</h1>
-            <form>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-danger" style="margin-bottom: 15px;">
+                        {% for message in messages %}
+                            <div>{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="post" action="{{ url_for('signin') }}">
+                <div class="form-group">
+                    <label for="loginRole">Sign in as</label>
+                    <select class="form-input" id="loginRole" name="role">
+                        <option value="user" selected>User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label for="loginUser">Username or Email</label>
-                    <input class="form-input" id="loginUser" type="text" required>
+                    <input class="form-input" id="loginUser" name="email" type="text" required>
                 </div>
 
                 <div class="form-group">
                     <label for="loginPassword">Password</label>
-                    <input class="form-input" id="loginPassword" type="password" required>
+                    <input class="form-input" id="loginPassword" name="password" type="password" required>
                 </div>
 
                 <button class="form-action" type="submit">Log In</button>
             </form>
 
-            <p class="form-note">Need an account? <a href="/static/signup.html">Sign Up</a></p>
+            <p class="form-note">Need an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
         </div>
 
         <footer class="footer"></footer>

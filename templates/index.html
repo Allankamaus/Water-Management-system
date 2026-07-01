@@ -4,10 +4,12 @@
   <div class="content home-content">
     <h1>Water System</h1>
     <p class="par">Water is a vital resource for life, and effective management of water systems is crucial for ensuring sustainable access to clean water. Our Water System Management System provides comprehensive solutions for monitoring, controlling, and optimizing water distribution networks.</p>
-    <div class="content-actions">
-      <a class="cn" href="{{ url_for('signup') }}">Sign Up</a>
-      <a class="cn cn-alt" href="{{ url_for('signin') }}">Log In</a>
-    </div>
+    {% if not current_user %}
+      <div class="content-actions">
+        <a class="cn" href="{{ url_for('signup') }}">Sign Up</a>
+        <a class="cn cn-alt" href="{{ url_for('signin') }}">Log In</a>
+      </div>
+    {% endif %}
 
     <div class="home-grid">
       <div class="home-card">

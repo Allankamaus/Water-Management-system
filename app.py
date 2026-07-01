@@ -39,7 +39,7 @@ def index():
             schedule = get_all_schedules()
             schedule_label = "All areas"
 
-    mapbox_token = os.environ.get("MAPBOX_TOKEN", "")
+    mapbox_token = os.environ.get("MAPBOX_TOKEN", "pk.eyJ1IjoiYWNlbnRlbGlvIiwiYSI6ImNtcjI5MjB1dDAzb2EyeXM0aThtN3g1eTMifQ.4PUAfaDYLyzQniH4M0anzQ")
 
     return render_template(
         "index.html",
@@ -85,7 +85,7 @@ def signin():
             flash("Signed in successfully")
             return redirect(url_for("admin_dashboard") if role == "admin" else url_for("index"))
 
-        flash("Invalid email or password")
+        flash("Username, email, or password is incorrect. Please try again.")
         return redirect(url_for("signin"))
 
     # For GET requests, just show the sign-in form.
@@ -176,7 +176,7 @@ def admin_schedule():
         return redirect(url_for("admin_schedule"))
 
     schedules = get_all_schedules()
-    mapbox_token = os.environ.get("MAPBOX_TOKEN", "")
+    mapbox_token = os.environ.get("MAPBOX_TOKEN", "pk.eyJ1IjoiYWNlbnRlbGlvIiwiYSI6ImNtcjI5MjB1dDAzb2EyeXM0aThtN3g1eTMifQ.4PUAfaDYLyzQniH4M0anzQ")
     return render_template("admin_schedule.html", schedules=schedules, mapbox_token=mapbox_token)
 
 

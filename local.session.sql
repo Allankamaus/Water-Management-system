@@ -1,1 +1,7 @@
 
+ALTER TABLE water_schedules
+ADD COLUMN IF NOT EXISTS latitude VARCHAR(50);
+
+ALTER TABLE water_schedules
+ADD COLUMN IF NOT EXISTS longitude VARCHAR(50);
+
