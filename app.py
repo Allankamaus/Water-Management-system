@@ -39,7 +39,7 @@ def index():
             schedule = get_all_schedules()
             schedule_label = "All areas"
 
-    mapbox_token = os.environ.get("MAPBOX_TOKEN", "pk.eyJ1IjoiYWNlbnRlbGlvIiwiYSI6ImNtcjI5MjB1dDAzb2EyeXM0aThtN3g1eTMifQ.4PUAfaDYLyzQniH4M0anzQ")
+    mapbox_token = os.environ.get("MAPBOX_TOKEN", "")
 
     return render_template(
         "index.html",
@@ -176,7 +176,7 @@ def admin_schedule():
         return redirect(url_for("admin_schedule"))
 
     schedules = get_all_schedules()
-    mapbox_token = os.environ.get("MAPBOX_TOKEN", "pk.eyJ1IjoiYWNlbnRlbGlvIiwiYSI6ImNtcjI5MjB1dDAzb2EyeXM0aThtN3g1eTMifQ.4PUAfaDYLyzQniH4M0anzQ")
+    mapbox_token = os.environ.get("MAPBOX_TOKEN", "")
     return render_template("admin_schedule.html", schedules=schedules, mapbox_token=mapbox_token)
 
 
