@@ -40,8 +40,22 @@ def ensure_schema():
                     CREATE TABLE IF NOT EXISTS water_schedules (
                         schedule_id VARCHAR(50) PRIMARY KEY,
                         location VARCHAR(255) NOT NULL,
-                        delivery_time VARCHAR(255) NOT NULL
+                        delivery_time VARCHAR(255) NOT NULL,
+                        latitude VARCHAR(50),
+                        longitude VARCHAR(50)
                     )
+                    """
+                )
+                cur.execute(
+                    """
+                    ALTER TABLE users
+                    ADD COLUMN IF NOT EXISTS latitude VARCHAR(50)
+                    """
+                )
+                cur.execute(
+                    """
+                    ALTER TABLE users
+                    ADD COLUMN IF NOT EXISTS longitude VARCHAR(50)
                     """
                 )
                 cur.execute(
@@ -84,7 +98,7 @@ def verify_user(email: str, password: str):
         return None
 
 
-def create_user(name: str, email: str, password: str, address: str = ""):
+def create_user(name: str, email: str, password: str, address: str = "", latitude: str = "", longitude: str = ""):
     """Create a new user. Returns True on success, False if user exists or on error."""
     hashed = generate_password_hash(password)
     try:
@@ -99,8 +113,8 @@ def create_user(name: str, email: str, password: str, address: str = ""):
                 username = email.split("@")[0]
                 user_id = f"USER-{uuid.uuid4().hex[:8].upper()}"
                 cur.execute(
-                    "INSERT INTO users (user_id, user_name, user_address, phone_number, fee_balance, email, username, password) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-                    (user_id, name, address, "", 0.00, email, username, hashed),
+                    "INSERT INTO users (user_id, user_name, user_address, phone_number, fee_balance, email, username, password, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                    (user_id, name, address, "", 0.00, email, username, hashed, latitude, longitude),
                 )
                 conn.commit()
                 return True
@@ -144,15 +158,15 @@ def get_all_users():
         return []
 
 
-def create_schedule(location: str, delivery_time: str):
+def create_schedule(location: str, delivery_time: str, latitude: str = "", longitude: str = ""):
     """Create a new water delivery schedule entry."""
     try:
         with get_conn() as conn:
             with conn.cursor() as cur:
                 schedule_id = f"SCH-{uuid.uuid4().hex[:8].upper()}"
                 cur.execute(
-                    "INSERT INTO water_schedules (schedule_id, location, delivery_time) VALUES (%s, %s, %s)",
-                    (schedule_id, location, delivery_time),
+                    "INSERT INTO water_schedules (schedule_id, location, delivery_time, latitude, longitude) VALUES (%s, %s, %s, %s, %s)",
+                    (schedule_id, location, delivery_time, latitude, longitude),
                 )
                 conn.commit()
                 return True
@@ -167,7 +181,7 @@ def get_all_schedules():
         with get_conn() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(
-                    "SELECT schedule_id, location, delivery_time FROM water_schedules ORDER BY schedule_id DESC"
+                    "SELECT schedule_id, location, delivery_time, latitude, longitude FROM water_schedules ORDER BY schedule_id DESC"
                 )
                 return cur.fetchall()
     except Exception as e:
@@ -183,7 +197,7 @@ def get_schedules_for_location(location: str):
         with get_conn() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(
-                    "SELECT schedule_id, location, delivery_time FROM water_schedules WHERE LOWER(location) = LOWER(%s) ORDER BY schedule_id DESC",
+                    "SELECT schedule_id, location, delivery_time, latitude, longitude FROM water_schedules WHERE LOWER(location) = LOWER(%s) ORDER BY schedule_id DESC",
                     (location,),
                 )
                 rows = cur.fetchall()
@@ -201,10 +215,25 @@ def get_user_profile(user_id: str):
         with get_conn() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
                 cur.execute(
-                    "SELECT user_id, user_name, user_address, email FROM users WHERE user_id = %s",
+                    "SELECT user_id, user_name, user_address, email, latitude, longitude FROM users WHERE user_id = %s",
                     (user_id,),
                 )
                 return cur.fetchone()
     except Exception as e:
         print("DB get_user_profile error:", e)
         return None
+
+def update_user_location(user_id: str, latitude: str, longitude: str):
+    """Update a user's saved location coordinates."""
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE users SET latitude = %s, longitude = %s WHERE user_id = %s",
+                    (latitude, longitude, user_id),
+                )
+                conn.commit()
+                return True
+    except Exception as e:
+        print("DB update_user_location error:", e)
+        return False

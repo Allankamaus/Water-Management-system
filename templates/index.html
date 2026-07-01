@@ -12,6 +12,9 @@
     <div class="home-grid">
       <div class="home-card">
         <h3>Upcoming Deliveries</h3>
+        {% if current_user %}
+          <div id="schedule-map" class="map-box"></div>
+        {% endif %}
         <p class="par">{{ schedule_label }}</p>
         {% if schedule %}
           <ul>
@@ -25,5 +28,43 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <script>
+    mapboxgl.accessToken = '{{ mapbox_token }}';
+    const map = new mapboxgl.Map({
+      container: 'schedule-map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [36.8219, -1.2921],
+      zoom: 11
+    });
+
+    const userLocation = {{ (profile.latitude if profile and profile.latitude else "36.8219") | tojson }};
+    const userLongitude = {{ (profile.longitude if profile and profile.longitude else "-1.2921") | tojson }};
+
+    const userMarker = new mapboxgl.Marker({ color: '#2563eb' })
+      .setLngLat([Number(userLongitude), Number(userLocation)])
+      .addTo(map);
+
+    const scheduleFeatures = {{ schedule|tojson }};
+    scheduleFeatures.forEach((item) => {
+      if (item.latitude && item.longitude) {
+        const popup = new mapboxgl.Popup({ offset: 25 }).setHTML('<strong>' + item.location + '</strong><br>' + item.delivery_time);
+        const markerEl = document.createElement('div');
+        markerEl.className = 'delivery-marker';
+        new mapboxgl.Marker(markerEl)
+          .setLngLat([Number(item.longitude), Number(item.latitude)])
+          .setPopup(popup)
+          .addTo(map);
+      }
+    });
+
+    map.on('load', () => {
+      map.resize();
+    });
+  </script>
 {% endblock %}
 

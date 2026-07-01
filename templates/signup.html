@@ -1,74 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Sign Up - Water System</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body class="auth-page">
-    <div class="main">
-        <div class="navbar">
-            <div class="icon">
-                <a class="logo" href="/static/index.html">Water</a>
-            </div>
+{% extends "base.html" %}
 
-            <div class="menu">
-                <ul>
-                    <li><a href="/static/home.html">Home</a></li>
-                    <li><a href="/static/about.html">About</a></li>
-                    <li><a href="/static/services.html">Services</a></li>
-                    <li><a href="/static/connections.html">Connections</a></li>
-                    <li><a href="/static/notices.html">Notices</a></li>
-                    <li><a href="/static/complaints.html">Complaints</a></li>
-                    <li><a href="/static/contact.html">Contact</a></li>
-                </ul>
-            </div>
-
-            <div class="search">
-                <input class="srch" type="search" placeholder="Search...">
-                <a href="#"><button class="btn">Search</button></a>
-            </div>
-        </div>
-
-        <div class="form-wrap">
-            <h1>Sign Up</h1>
-            <form>
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input class="form-input" id="name" type="text" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input class="form-input" id="email" type="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input class="form-input" id="username" type="text" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input class="form-input" id="password" type="password" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input class="form-input" id="confirmPassword" type="password" required>
-                </div>
-
-                <button class="form-action" type="submit">Create Account</button>
-            </form>
-
-            <p class="form-note">Already have an account? <a href="/static/login.html">Log In</a></p>
-        </div>
-
-        <footer class="footer"></footer>
-    </div>
-</body>
-</html>
-
-<<<<<<< HEAD
 {% block content %}
   <div class="form-wrap">
     <h1>Sign Up</h1>
@@ -86,6 +17,13 @@
         <input type="text" name="address" class="form-input" placeholder="e.g. North Zone" required>
       </div>
       <div class="form-group">
+        <label>Pick your location on the map</label>
+        <input type="hidden" id="latitude" name="latitude" value="">
+        <input type="hidden" id="longitude" name="longitude" value="">
+        <div id="map" class="map-box"></div>
+        <small class="form-note">Click on the map to choose your service area.</small>
+      </div>
+      <div class="form-group">
         <label>Password</label>
         <input type="password" name="password" class="form-input" required>
       </div>
@@ -93,5 +31,37 @@
     </form>
   </div>
 {% endblock %}
-=======
->>>>>>> 8292ed50474b5a810101db9fe4e9b79cf1e7e3d5
+
+{% block extra_scripts %}
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css' rel='stylesheet' />
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYWNlbnRlbGlvIiwiYSI6ImNtcjI5MjB1dDAzb2EyeXM0aThtN3g1eTMifQ.4PUAfaDYLyzQniH4M0anzQ';
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [36.8219, -1.2921],
+      zoom: 12
+    });
+    const marker = new mapboxgl.Marker({ draggable: true })
+      .setLngLat([36.8219, -1.2921])
+      .addTo(map);
+
+    function updateLocation(lng, lat) {
+      document.getElementById('longitude').value = lng.toFixed(6);
+      document.getElementById('latitude').value = lat.toFixed(6);
+    }
+
+    map.on('click', (e) => {
+      marker.setLngLat(e.lngLat);
+      updateLocation(e.lngLat.lng, e.lngLat.lat);
+    });
+
+    marker.on('dragend', () => {
+      const lngLat = marker.getLngLat();
+      updateLocation(lngLat.lng, lngLat.lat);
+    });
+
+    updateLocation(36.8219, -1.2921);
+  </script>
+{% endblock %}

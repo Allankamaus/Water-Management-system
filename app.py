@@ -9,6 +9,7 @@ from db import (
     create_schedule,
     get_schedules_for_location,
     get_user_profile,
+    update_user_location,
 )
 
 # Create the Flask application object. This is the central object used to
@@ -27,6 +28,7 @@ def index():
     schedule = get_all_schedules()
     schedule_label = "All areas"
 
+    profile = None
     if session.get("user_id"):
         user = {"id": session.get("user_id"), "name": session.get("user_name")}
         profile = get_user_profile(session.get("user_id"))
@@ -37,11 +39,15 @@ def index():
             schedule = get_all_schedules()
             schedule_label = "All areas"
 
+    mapbox_token = os.environ.get("MAPBOX_TOKEN", "pk.eyJ1IjoiYWNlbnRlbGlvIiwiYSI6ImNtcjI5MjB1dDAzb2EyeXM0aThtN3g1eTMifQ.4PUAfaDYLyzQniH4M0anzQ")
+
     return render_template(
         "index.html",
         schedule=schedule,
         schedule_label=schedule_label,
         user=user,
+        profile=profile,
+        mapbox_token=mapbox_token,
         page_class="landing-page",
     )
 
@@ -94,7 +100,9 @@ def signup():
         email = request.form.get("email")
         password = request.form.get("password")
         address = request.form.get("address", "").strip()
-        created = create_user(name, email, password, address)
+        latitude = request.form.get("latitude", "").strip()
+        longitude = request.form.get("longitude", "").strip()
+        created = create_user(name, email, password, address, latitude, longitude)
         if created:
             flash("Account created. Please sign in.")
             return redirect(url_for("signin"))
@@ -153,9 +161,11 @@ def admin_schedule():
     if request.method == "POST":
         location = request.form.get("location", "").strip()
         delivery_time = request.form.get("delivery_time", "").strip()
+        latitude = request.form.get("latitude", "").strip()
+        longitude = request.form.get("longitude", "").strip()
 
         if location and delivery_time:
-            created = create_schedule(location, delivery_time)
+            created = create_schedule(location, delivery_time, latitude, longitude)
             if created:
                 flash("Water delivery schedule created successfully")
             else:
@@ -166,7 +176,8 @@ def admin_schedule():
         return redirect(url_for("admin_schedule"))
 
     schedules = get_all_schedules()
-    return render_template("admin_schedule.html", schedules=schedules)
+    mapbox_token = os.environ.get("MAPBOX_TOKEN", "pk.eyJ1IjoiYWNlbnRlbGlvIiwiYSI6ImNtcjI5MjB1dDAzb2EyeXM0aThtN3g1eTMifQ.4PUAfaDYLyzQniH4M0anzQ")
+    return render_template("admin_schedule.html", schedules=schedules, mapbox_token=mapbox_token)
 
 
 @app.route("/admin")
