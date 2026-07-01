@@ -47,25 +47,72 @@
     const userLocation = {{ (profile.latitude if profile and profile.latitude else "36.8219") | tojson }};
     const userLongitude = {{ (profile.longitude if profile and profile.longitude else "-1.2921") | tojson }};
 
-    const userMarker = new mapboxgl.Marker({ color: '#2563eb' })
-      .setLngLat([Number(userLongitude), Number(userLocation)])
-      .addTo(map);
+    function buildRadiusPolygon(center, radiusKm, steps = 64) {
+      const [lng, lat] = center;
+      const coords = [];
+      const earthRadiusKm = 6371;
+      const deltaLat = radiusKm / 111.32;
 
-    const scheduleFeatures = {{ schedule|tojson }};
-    scheduleFeatures.forEach((item) => {
-      if (item.latitude && item.longitude) {
-        const popup = new mapboxgl.Popup({ offset: 25 }).setHTML('<strong>' + item.location + '</strong><br>' + item.delivery_time);
-        const markerEl = document.createElement('div');
-        markerEl.className = 'delivery-marker';
-        new mapboxgl.Marker(markerEl)
-          .setLngLat([Number(item.longitude), Number(item.latitude)])
-          .setPopup(popup)
-          .addTo(map);
+      for (let i = 0; i <= steps; i++) {
+        const angle = (i / steps) * 2 * Math.PI;
+        const deltaLng = (deltaLat / Math.cos(lat * Math.PI / 180)) * Math.sin(angle);
+        const pointLat = lat + (deltaLat * Math.cos(angle));
+        const pointLng = lng + deltaLng;
+        coords.push([pointLng, pointLat]);
       }
-    });
+
+      return {
+        type: 'FeatureCollection',
+        features: [{
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [coords]
+          },
+          properties: {}
+        }]
+      };
+    }
 
     map.on('load', () => {
       map.resize();
+
+      const userMarker = new mapboxgl.Marker({ color: '#2563eb' })
+        .setLngLat([Number(userLongitude), Number(userLocation)])
+        .addTo(map);
+
+      const radiusKm = 10;
+      const center = [Number(userLongitude), Number(userLocation)];
+      const radiusGeojson = buildRadiusPolygon(center, radiusKm, 64);
+
+      map.addSource('user-radius', {
+        type: 'geojson',
+        data: radiusGeojson
+      });
+
+      map.addLayer({
+        id: 'user-radius-layer',
+        type: 'fill',
+        source: 'user-radius',
+        paint: {
+          'fill-color': '#2563eb',
+          'fill-opacity': 0.15,
+          'fill-outline-color': '#2563eb'
+        }
+      });
+
+      const scheduleFeatures = {{ schedule|tojson }};
+      scheduleFeatures.forEach((item) => {
+        if (item.latitude && item.longitude) {
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML('<strong>' + item.location + '</strong><br>' + item.delivery_time);
+          const markerEl = document.createElement('div');
+          markerEl.className = 'delivery-marker';
+          new mapboxgl.Marker(markerEl)
+            .setLngLat([Number(item.longitude), Number(item.latitude)])
+            .setPopup(popup)
+            .addTo(map);
+        }
+      });
     });
   </script>
 {% endblock %}
